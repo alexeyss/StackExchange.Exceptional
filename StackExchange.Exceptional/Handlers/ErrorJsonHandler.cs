@@ -31,6 +31,7 @@ namespace StackExchange.Exceptional.Handlers
         private class JsonError
         {
             public string HostName { get; set; }
+            public string ApplicationMessage { get; set; }
             public string Message { get; set; }
             public int DuplicateCount { get; set; }
             public long EpochTime { get; set; }
@@ -44,6 +45,7 @@ namespace StackExchange.Exceptional.Handlers
             public JsonError(Error error)
             {
                 Id = error.Id.ToString();
+                ApplicationMessage = error.ApplicationMessage;
                 Message = error.Message;
                 DuplicateCount = error.DuplicateCount ?? 0;
                 EpochTime = (long)(error.CreationDate - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;

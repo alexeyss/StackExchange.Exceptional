@@ -580,12 +580,13 @@ namespace StackExchange.Exceptional
         /// so that they don't have to carry a reference to System.Web
         /// </summary>
         /// <param name="ex">The exception to log</param>
+        /// <param name="applicationMessage">the application message</param>
         /// <param name="appendFullStackTrace">Whether to append a full stack trace to the exception's detail</param>
         /// <param name="rollupPerServer">Whether to log up per-server, e.g. errors are only duplicates if they have same stack on the same machine</param>
         /// <param name="customData">Any custom data to store with the exception like UserId, etc...this will be rendered as JSON in the error view for script use</param>
-        public static Error LogExceptionWithoutContext(Exception ex, bool appendFullStackTrace = false, bool rollupPerServer = false, Dictionary<string, string> customData = null)
+        public static Error LogExceptionWithoutContext(Exception ex, string applicationMessage = null, bool appendFullStackTrace = false, bool rollupPerServer = false, Dictionary<string, string> customData = null)
         {
-            return LogException(ex, null, appendFullStackTrace, rollupPerServer, customData);
+            return LogException(ex, null, applicationMessage, appendFullStackTrace, rollupPerServer, customData);
         }
 
         /// <summary>
@@ -593,6 +594,7 @@ namespace StackExchange.Exceptional
         /// </summary>
         /// <param name="ex">The exception to log</param>
         /// <param name="context">The HTTPContext to record variables from.  If this isn't a web request, pass <see langword="null" /> in here</param>
+        /// <param name="applicationMessage">The application message</param>
         /// <param name="appendFullStackTrace">Whether to append a full stack trace to the exception's detail</param>
         /// <param name="rollupPerServer">Whether to log up per-server, e.g. errors are only duplicates if they have same stack on the same machine</param>
         /// <param name="customData">Any custom data to store with the exception like UserId, etc...this will be rendered as JSON in the error view for script use</param>
@@ -602,7 +604,7 @@ namespace StackExchange.Exceptional
         /// When dealing with a non web requests, pass <see langword="null" /> in for context.  
         /// It shouldn't be forgotten for most web application usages, so it's not an optional parameter.
         /// </remarks>
-        public static Error LogException(Exception ex, HttpContext context, bool appendFullStackTrace = false, bool rollupPerServer = false, Dictionary<string, string> customData = null, string applicationName = null)
+        public static Error LogException(Exception ex, HttpContext context, string applicationMessage = null, bool appendFullStackTrace = false, bool rollupPerServer = false, Dictionary<string, string> customData = null, string applicationName = null)
         {
             if (!_enableLogging) return null;
             try
@@ -626,7 +628,7 @@ namespace StackExchange.Exceptional
                     }
                 }
 
-                var error = new Error(ex, context, applicationName)
+                var error = new Error(ex, context, applicationName, applicationMessage)
                                 {
                                     RollupPerServer = rollupPerServer,
                                     CustomData = customData

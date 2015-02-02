@@ -200,8 +200,8 @@ Update Exceptions
                 error.FullJson = error.ToJson();
 
                 c.Execute(@"
-Insert Into Exceptions (GUID, ApplicationName, MachineName, CreationDate, Type, IsProtected, Host, Url, HTTPMethod, IPAddress, Source, Message, Detail, StatusCode, SQL, FullJson, ErrorHash, DuplicateCount)
-Values (@GUID, @ApplicationName, @MachineName, @CreationDate, @Type, @IsProtected, @Host, @Url, @HTTPMethod, @IPAddress, @Source, @Message, @Detail, @StatusCode, @SQL, @FullJson, @ErrorHash, @DuplicateCount)",
+Insert Into Exceptions (GUID, ApplicationName, MachineName, CreationDate, Type, IsProtected, Host, Url, HTTPMethod, IPAddress, Source, ApplicationMessage, Message, Detail, StatusCode, SQL, FullJson, ErrorHash, DuplicateCount)
+Values (@GUID, @ApplicationName, @MachineName, @CreationDate, @Type, @IsProtected, @Host, @Url, @HTTPMethod, @IPAddress, @Source, @ApplicationMessage, @Message, @Detail, @StatusCode, @SQL, @FullJson, @ErrorHash, @DuplicateCount)",
                     new {
                             error.GUID,
                             ApplicationName = error.ApplicationName.Truncate(50),
@@ -214,6 +214,7 @@ Values (@GUID, @ApplicationName, @MachineName, @CreationDate, @Type, @IsProtecte
                             HTTPMethod = error.HTTPMethod.Truncate(10), // this feels silly, but you never know when someone will up and go crazy with HTTP 1.2!
                             error.IPAddress,
                             Source = error.Source.Truncate(100),
+                            ApplicationMessage = error.ApplicationMessage.Truncate(1000),
                             Message = error.Message.Truncate(1000),
                             error.Detail,
                             error.StatusCode,

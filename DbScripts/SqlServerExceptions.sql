@@ -11,6 +11,7 @@ CREATE TABLE [dbo].[Exceptions](
 	[HTTPMethod] [nvarchar](10) NULL,
 	[IPAddress] [varchar](40) NULL,
 	[Source] [nvarchar](100) NULL,
+	[ApplicationMessage] [nvarchar](1000) NULL,
 	[Message] [nvarchar](1000) NULL,
 	[Detail] [nvarchar](max) NULL,	
 	[StatusCode] [int] NULL,

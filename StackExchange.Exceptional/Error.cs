@@ -55,7 +55,9 @@ namespace StackExchange.Exceptional
         /// <summary>
         /// Initializes a new instance of the <see cref="Error"/> class from a given <see cref="Exception"/> instance.
         /// </summary>
-        public Error(Exception e): this(e, null) { }
+        public Error(Exception e): this(e, null, null) { }
+
+        public Error(Exception e, HttpContext context, string applicationMessage = null) : this(e, context, null, applicationMessage) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Error"/> class
@@ -63,7 +65,7 @@ namespace StackExchange.Exceptional
         /// <see cref="HttpContext"/> instance representing the HTTP 
         /// context during the exception.
         /// </summary>
-        public Error(Exception e, HttpContext context, string applicationName = null)
+        public Error(Exception e, HttpContext context, string applicationName = null, string applicationMessage = null)
         {
             if (e == null) throw new ArgumentNullException("e");
 
@@ -80,6 +82,7 @@ namespace StackExchange.Exceptional
             ApplicationName = applicationName ?? ErrorStore.ApplicationName;
             MachineName = Environment.MachineName;
             Type = baseException.GetType().FullName;
+            ApplicationMessage = applicationMessage;
             Message = baseException.Message;
             Source = baseException.Source;
             Detail = e.ToString();
@@ -217,6 +220,11 @@ namespace StackExchange.Exceptional
         /// Gets the source of this error
         /// </summary>
         public string Source { get; set; }
+
+        /// <summary>
+        /// Gets the application message
+        /// </summary>
+        public string ApplicationMessage { get; set; }
 
         /// <summary>
         /// Gets the exception message
@@ -468,6 +476,7 @@ namespace StackExchange.Exceptional
                                                 IPAddress,
                                                 IsProtected,
                                                 MachineName,
+                                                ApplicationMessage,
                                                 Message,
                                                 SQL,
                                                 Source,

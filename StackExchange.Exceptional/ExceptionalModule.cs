@@ -46,7 +46,7 @@ namespace StackExchange.Exceptional
         /// </summary>
         public virtual void LogException(Exception ex, HttpContext context, bool appendFullStackTrace = false)
         {
-            ErrorStore.LogException(ex, context, appendFullStackTrace);
+            ErrorStore.LogException(ex, context, null, appendFullStackTrace);
         }
     }
 }
