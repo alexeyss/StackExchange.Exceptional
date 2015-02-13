@@ -135,6 +135,14 @@ namespace StackExchange.Exceptional.Stores
         }
 
         /// <summary>
+        /// Log the info message to the in-memory info log
+        /// </summary>
+        protected override void LogInfo(Info info)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Gets the error with the specified guid from the in-memory log
         /// </summary>
         /// <param name="guid">The guid of the error to retrieve</param>

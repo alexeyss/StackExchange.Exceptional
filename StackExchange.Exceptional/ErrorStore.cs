@@ -1,4 +1,5 @@
 using System;
+using System.CodeDom;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
@@ -94,6 +95,11 @@ namespace StackExchange.Exceptional
         /// Logs an error in log for the application
         /// </summary>
         protected abstract void LogError(Error error);
+
+        /// <summary>
+        /// Logs an info in log for the application
+        /// </summary>
+        protected abstract void LogInfo(Info info);
 
         /// <summary>
         /// Retrieves a single error based on Id
@@ -256,6 +262,20 @@ namespace StackExchange.Exceptional
                 _retryException = ex;
                 // if we fail to write the error to the store, queue it for re-writing
                 QueueError(error);
+            }
+        }
+
+        /// <summary>
+        /// Log an info message for the application
+        /// </summary>
+        public void Info(Info info)
+        {
+            if (info == null)
+                throw new ArgumentNullException("info");
+
+            using (new TransactionScope(TransactionScopeOption.Suppress))
+            {
+                LogInfo(info);
             }
         }
 
@@ -695,6 +715,30 @@ namespace StackExchange.Exceptional
             catch (Exception e)
             {
                 Trace.WriteLine(e);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Logs info message
+        /// </summary>
+        public static Info LogInfo(string message, string applicationName = null)
+        {
+            try
+            {
+                var info = new Info
+                    {
+                        Message = message,
+                        ApplicationName = applicationName.IsNullOrEmptyReturn(ApplicationName)
+                    };
+
+                Trace.WriteLine(info);
+                Default.LogInfo(info);
+                return info;
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex);
                 return null;
             }
         }

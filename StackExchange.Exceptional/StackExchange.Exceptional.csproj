@@ -78,6 +78,7 @@
     <Compile Include="Handlers\ResourceHandler.cs" />
     <Compile Include="Handlers\RedirectHandler.cs" />
     <Compile Include="Handlers\ErrorJsonHandler.cs" />
+    <Compile Include="Info.cs" />
     <Compile Include="Pages\ErrorInfo.generated.cs">
       <DependentUpon>ErrorInfo.cshtml</DependentUpon>
       <AutoGen>True</AutoGen>

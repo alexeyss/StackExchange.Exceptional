@@ -139,6 +139,7 @@ else
 {
     <h1 class="error-title">@error.Message</h1>
     <div class="error-type">@error.Type</div>
+    <div class="error-type">error.ApplicationMessage</div>
     <pre class="error-detail">@error.Detail
     </pre>
     <p class="error-time">occurred <b title="@error.CreationDate.ToLongDateString() at @error.CreationDate.ToLongTimeString()">@error.CreationDate.ToRelativeTime()</b> on @error.MachineName <span class="info-delete-link">(<a class="info-link" href="delete?guid=@error.GUID">delete</a>)</span></p>

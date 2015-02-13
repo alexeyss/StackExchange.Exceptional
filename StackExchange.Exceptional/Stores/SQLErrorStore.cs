@@ -227,6 +227,25 @@ Values (@GUID, @ApplicationName, @MachineName, @CreationDate, @Type, @IsProtecte
         }
 
         /// <summary>
+        /// Log the info message to SQL
+        /// </summary>
+        protected override void LogInfo(Info info)
+        {
+            using (var c = GetConnection())
+            {
+                c.Execute(@"insert into Info(ApplicationName, MachineName, CreationDate, Message)
+                            values (@ApplicationName, @MachineName, @CreationDate, @Message)",
+                    new
+                    {
+                        ApplicationName = info.ApplicationName.Truncate(50),
+                        MachineName = info.MachineName.Truncate(50),
+                        info.CreationDate,
+                        info.Message
+                    });
+            }
+        }
+
+        /// <summary>
         /// Gets the error with the specified guid from SQL
         /// This can return a deleted error as well, there's no filter based on DeletionDate
         /// </summary>

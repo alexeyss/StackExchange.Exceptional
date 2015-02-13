@@ -38,6 +38,7 @@ else
                 <tr>
                     <th class="type-col">&nbsp;</th>
                     <th class="type-col">Type</th>
+                    <th>Message</th>
                     <th>Error</th>
                     <th>Url</th>
                     <th>Remote IP</th>
@@ -59,6 +60,7 @@ else
                         }
                     </td>
                     <td class="type-col" title="@e.Type">@e.Type.ToShortException()</td>
+                    <td class="error-col"><a href="@Url("info?guid="+@e.GUID)" class="info-link">@e.ApplicationMessage</a>
                     <td class="error-col"><a href="@Url("info?guid="+@e.GUID)" class="info-link">@e.Message</a> 
                     @if(e.DuplicateCount > 1)
                     {

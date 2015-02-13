@@ -237,6 +237,14 @@ Values (@GUID, @ApplicationName, @MachineName, @CreationDate, @Type, @IsProtecte
         }
 
         /// <summary>
+        /// Log an info message to MySQL
+        /// </summary>
+        protected override void LogInfo(Info info)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         ///     Gets the error with the specified guid from SQL
         ///     This can return a deleted error as well, there's no filter based on DeletionDate
         /// </summary>

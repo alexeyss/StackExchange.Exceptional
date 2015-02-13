@@ -169,6 +169,14 @@ namespace StackExchange.Exceptional.Stores
             }
         }
 
+        /// <summary>
+        /// Logs the JSON representation of an info message to the file store specified by the page for this store
+        /// </summary>
+        protected override void LogInfo(Info info)
+        {
+            throw new NotImplementedException();
+        }
+
         private void LogError(Error error, StreamWriter outstream)
         {
             var json = error.ToJson();
