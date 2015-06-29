@@ -233,14 +233,46 @@ Values (@GUID, @ApplicationName, @MachineName, @CreationDate, @Type, @IsProtecte
         {
             using (var c = GetConnection())
             {
-                c.Execute(@"insert into Info(ApplicationName, MachineName, CreationDate, Message)
-                            values (@ApplicationName, @MachineName, @CreationDate, @Message)",
+                if (RollupThreshold.HasValue && info.ItemHash.HasValue)
+                {
+                    var queryParams = new DynamicParameters(new
+                    {
+                        info.DuplicateCount,
+                        info.ItemHash,
+                        ApplicationName = info.ApplicationName.Truncate(50),
+                        minDate = DateTime.UtcNow.Add(RollupThreshold.Value.Negate())
+                    });
+                    queryParams.Add("@newGUID", dbType: DbType.Guid, direction: ParameterDirection.Output);
+                    var count = c.Execute(@"
+                        Update Info 
+                           Set DuplicateCount = DuplicateCount + @DuplicateCount,
+                               @newGUID = GUID
+                         Where Id In (Select Top 1 Id
+                                        From Info 
+                                       Where ItemHash = @ItemHash
+                                         And ApplicationName = @ApplicationName
+                                         And DeletionDate Is Null
+                                         And CreationDate >= @minDate)"
+                        , queryParams);
+                    // if we found an error that's a duplicate, jump out
+                    if (count > 0)
+                    {
+                        info.GUID = queryParams.Get<Guid>("@newGUID");
+                        return;
+                    }
+                }
+
+                c.Execute(@"insert into Info(ApplicationName, MachineName, CreationDate, Message, IsProtected, ItemHash, DuplicateCount)
+                            values (@ApplicationName, @MachineName, @CreationDate, @Message, @IsProtected, @ItemHash, @DuplicateCount)",
                     new
                     {
                         ApplicationName = info.ApplicationName.Truncate(50),
                         MachineName = info.MachineName.Truncate(50),
                         info.CreationDate,
-                        info.Message
+                        info.Message,
+                        info.IsProtected,
+                        info.ItemHash,
+                        info.DuplicateCount
                     });
             }
         }
