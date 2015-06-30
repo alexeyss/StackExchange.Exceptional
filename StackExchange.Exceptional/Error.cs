@@ -13,7 +13,7 @@ namespace StackExchange.Exceptional
     /// Represents a logical application error (as opposed to the actual exception it may be representing).
     /// </summary>
     [Serializable]
-    public class Error
+    public class Error : ILogItem
     {
         internal const string CollectionErrorKey = "CollectionFetchError";
 
@@ -240,6 +240,12 @@ namespace StackExchange.Exceptional
         /// The hash that describes this error
         /// </summary>
         public int? ErrorHash { get; set; }
+
+        public int? ItemHash
+        {
+            get { return ErrorHash; }
+            set { ErrorHash = value; }
+        }
 
         /// <summary>
         /// Gets the time in UTC that the error occured

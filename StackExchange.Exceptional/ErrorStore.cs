@@ -726,11 +726,7 @@ namespace StackExchange.Exceptional
         {
             try
             {
-                var info = new Info
-                    {
-                        Message = message,
-                        ApplicationName = applicationName.IsNullOrEmptyReturn(ApplicationName)
-                    };
+                var info = new Info(message, applicationName.IsNullOrEmptyReturn(ApplicationName));
 
                 Trace.WriteLine(info);
                 Default.LogInfo(info);
